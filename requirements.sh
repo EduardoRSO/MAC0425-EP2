@@ -2,3 +2,4 @@
 
 eval "sudo apt-get update -y"
 eval "sudo apt-get install -y python3-ply"
+eval "sudo apt-get install unzip"
