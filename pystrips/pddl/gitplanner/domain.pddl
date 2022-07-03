@@ -27,63 +27,68 @@
     ;; git add <new-file>
     (:action git-add-new
         :parameters (?f - file)
-        :precondition (and ...)
-        :effect (and
-            ...
+        :precondition (untracked f)
+        :effect (and 
+			(staged f) 
+			(not (untracked f)))
         )
     )
 
     ;; git add <old-file>
     (:action git-add
         :parameters (?f - file)
-        :precondition (and ...)
-        :effect (and
-            ...
+        :precondition (modified-in-workspace f)
+        :effect (staged f)
         )
     )
     
     ;; git rm <old-file>
     (:action git-rm
         :parameters (?f - file)
-        :precondition (and ...)
-        :effect (and
-            ...
+        :precondition (committed f)
+        :effect (deleted-in-workspace f)
         )
     )
     
     ;; git checkout -- <old-file>
     (:action git-checkout
         :parameters (?f - file)
-        :precondition (and ...)
-        :effect (and
-            ...
+        :precondition (and (commited f) (modified-in-workspace f))   
+        :effect (and 
+			(clean f)
+			(not (modified-in-workspace f))) 
         )
     )
     
     ;; git reset -- <old-file>
     (:action git-reset
         :parameters (?f - file)
-        :precondition (and ...)
-        :effect (and
-            ...
+        :precondition (staged f)
+        :effect (and 
+			(modified-in-workspace f)
+			(not (staged f))) 
         )
     )
     
     ;; git reset -- <new-file>
     (:action git-reset-new
         :parameters (?f - file)
-        :precondition (and ...)
-        :effect (and
-            ...
+        :precondition (deleted-in-workspace ?f)
+        :effect (and 
+			(untracked ?f)
+			(not (staged ?f))) 
         )
     )
 
     ;; git commit <file>
     (:action git-commit
         :parameters (?f - file)
-        :precondition (and ...)
-        :effect (and
-            ...
+        :precondition (staged f)
+        :effect (and 
+			(clean f) 
+			(committed f) 
+			(not (staged f)) 
+			(not (modified-in-workspace f))
         )
     )
 )
